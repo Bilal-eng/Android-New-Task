@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">AndroidNewTask</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="categories_fragment">Categories Fragment</string>
+    <string name="home_fragment">Home Fragment</string>
+    <string name="vendors_fragment">Vendors Fragment</string>
+    <string name="wishlists_fragment">WishLists Fragment</string>
+    <string name="profile_fragment">Profile Fragment</string>
+    <string name="home">Home</string>
+    <string name="categories">Categories</string>
+    <string name="vendors">Vendors</string>
+    <string name="wishlists">WishLists</string>
+    <string name="profile">Profile</string>
 </resources>
