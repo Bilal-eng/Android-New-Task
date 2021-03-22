@@ -2,18 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
+    android:layout_width="160dp"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="16dp"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
         android:background="@android:color/white"
         android:clickable="true"
         android:focusable="true"
@@ -21,24 +18,33 @@
         app:cardCornerRadius="7dp">
 
         <RelativeLayout
-            android:layout_width="160dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
 
             <ImageView
-                android:id="@+id/ivBackgroundImage"
+                android:id="@+id/ivProductImage"
                 android:layout_width="160dp"
                 android:layout_height="210dp"
                 android:scaleType="centerCrop"
                 tools:src="@drawable/banner" />
 
             <ImageView
-                android:id="@+id/ivFavIcon"
+                android:id="@+id/ivEmptyFavIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:padding="8dp"
                 android:src="@drawable/empty_fav" />
+
+            <ImageView
+                android:id="@+id/ivFilledFavIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:visibility="gone"
+                android:padding="8dp"
+                android:src="@drawable/filled_fav" />
 
 
         </RelativeLayout>
@@ -47,12 +53,13 @@
     </androidx.cardview.widget.CardView>
 
     <TextView
-        android:id="@+id/tvProductName"
+        android:id="@+id/tvProductTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:lines="1"
         android:maxLines="1"
+        android:ellipsize="end"
         android:textColor="@android:color/black"
         tools:text="@string/half_sleeve_dress" />
 

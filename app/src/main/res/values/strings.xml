@@ -22,4 +22,5 @@
     <string name="leona_wilson">LEONA WILSON</string>
     <string name="_11_06_2019">11.06.2019</string>
     <string name="top_sales">Top Sales</string>
+    <string name="search_hint">Search Products by name...</string>
 </resources>
