@@ -69,4 +69,17 @@ dependencies {
 
     // Google Play services dependency
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
+
+    //CircleImageView dependency
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    //ViewPager indicator dependency
+    implementation('com.github.JakeWharton:ViewPagerIndicator:2.4.1') {
+        exclude group: 'com.android.support'
+        exclude module: 'appcompat-v7'
+        exclude module: 'support-v4'
+    }
+
+    //CardView dependency
+    implementation "androidx.cardview:cardview:1.0.0"
 }

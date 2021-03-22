@@ -7,27 +7,27 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.androidnewtask.ui.fragments.HomeFragment"
+        android:name="com.example.androidnewtask.ui.fragments.home.HomeFragment"
         android:label="Shopping"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/categoriesFragment"
-        android:name="com.example.androidnewtask.ui.fragments.CategoriesFragment"
+        android:name="com.example.androidnewtask.ui.fragments.category.CategoriesFragment"
         android:label="Categories"
         tools:layout="@layout/fragment_categories" />
     <fragment
         android:id="@+id/vendorsFragment"
-        android:name="com.example.androidnewtask.ui.fragments.VendorsFragment"
+        android:name="com.example.androidnewtask.ui.fragments.vendors.VendorsFragment"
         android:label="Vendors"
         tools:layout="@layout/fragment_vendors" />
     <fragment
         android:id="@+id/wishlistsFragment"
-        android:name="com.example.androidnewtask.ui.fragments.WishlistsFragment"
+        android:name="com.example.androidnewtask.ui.fragments.wishlists.WishlistsFragment"
         android:label="Wishlists"
         tools:layout="@layout/fragment_wishlists" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.androidnewtask.ui.fragments.ProfileFragment"
+        android:name="com.example.androidnewtask.ui.fragments.profile.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile" />
 </navigation>
