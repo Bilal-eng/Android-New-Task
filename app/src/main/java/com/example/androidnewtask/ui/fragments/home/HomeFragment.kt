@@ -3,13 +3,17 @@ package com.example.androidnewtask.ui.fragments.home
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -20,6 +24,7 @@ import com.example.androidnewtask.ui.adapters.BannersAdapter
 import com.example.androidnewtask.ui.adapters.CategoriesAdapter
 import com.example.androidnewtask.ui.adapters.ProductsAdapter
 import com.example.androidnewtask.ui.fragments.base.BaseFragment
+import com.example.androidnewtask.utils.NetworkUtils
 import com.example.androidnewtask.utils.PermissionUtils
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -42,6 +47,7 @@ class HomeFragment : BaseFragment() {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -70,14 +76,20 @@ class HomeFragment : BaseFragment() {
 
         setAdapters()
 
+        btnTryAgain.setOnClickListener {
+            getCurrentLocationName()
+        }
+
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun getCurrentLocationName() {
         when {
             PermissionUtils.isAccessFineLocationGranted(context) -> {
                 when {
                     PermissionUtils.isLocationEnabled(context) -> {
                         setUpLocationListener()
+                        checkNetworkConnection()
                         viewModel.getHomePage(HomeBody(2, 1))
                     }
                     else -> {
@@ -92,6 +104,18 @@ class HomeFragment : BaseFragment() {
                 )
             }
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun checkNetworkConnection() {
+        if (!NetworkUtils.isNetworkConnected(context)) {
+            llNoInternetConnection.visibility = VISIBLE
+            llData.visibility = GONE
+        } else {
+            llNoInternetConnection.visibility = GONE
+            llData.visibility = VISIBLE
+        }
+        swipeToRefresh.isRefreshing = false
     }
 
     private fun setAdapters() {
@@ -147,6 +171,7 @@ class HomeFragment : BaseFragment() {
         )
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onStart() {
         super.onStart()
         getCurrentLocationName()
