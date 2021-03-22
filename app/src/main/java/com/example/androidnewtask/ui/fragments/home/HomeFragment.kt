@@ -1,10 +1,16 @@
 package com.example.androidnewtask.ui.fragments.home
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.androidnewtask.R
@@ -14,6 +20,11 @@ import com.example.androidnewtask.ui.adapters.BannersAdapter
 import com.example.androidnewtask.ui.adapters.CategoriesAdapter
 import com.example.androidnewtask.ui.adapters.ProductsAdapter
 import com.example.androidnewtask.ui.fragments.base.BaseFragment
+import com.example.androidnewtask.utils.PermissionUtils
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : BaseFragment() {
@@ -49,10 +60,8 @@ class HomeFragment : BaseFragment() {
         })
 
         swipeToRefresh.setOnRefreshListener {
-            viewModel.getHomePage(HomeBody(2, 1))
+            getCurrentLocationName()
         }
-
-        viewModel.getHomePage(HomeBody(2, 1))
 
         viewModel.homeResponse.observe(viewLifecycleOwner, Observer {
             Log.i(TAG, it.commonContent.categories.toString())
@@ -61,6 +70,28 @@ class HomeFragment : BaseFragment() {
 
         setAdapters()
 
+    }
+
+    private fun getCurrentLocationName() {
+        when {
+            PermissionUtils.isAccessFineLocationGranted(context) -> {
+                when {
+                    PermissionUtils.isLocationEnabled(context) -> {
+                        setUpLocationListener()
+                        viewModel.getHomePage(HomeBody(2, 1))
+                    }
+                    else -> {
+                        PermissionUtils.showGPSNotEnabledDialog(context)
+                    }
+                }
+            }
+            else -> {
+                requestPermissions(
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    LOCATION_PERMISSION_REQUEST_CODE
+                )
+            }
+        }
     }
 
     private fun setAdapters() {
@@ -89,8 +120,70 @@ class HomeFragment : BaseFragment() {
         swipeToRefresh.isRefreshing = false
     }
 
+    @SuppressLint("MissingPermission")
+    private fun setUpLocationListener() {
+        val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
+        // for getting the current location update after every 2 seconds with high accuracy
+        val locationRequest = LocationRequest().setInterval(2000).setFastestInterval(2000)
+            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+        fusedLocationProviderClient.requestLocationUpdates(
+            locationRequest,
+            object : LocationCallback() {
+                override fun onLocationResult(locationResult: LocationResult) {
+                    super.onLocationResult(locationResult)
+                    for (location in locationResult.locations) {
+                        tvLocationName?.text =
+                            context?.let {
+                                getCountryName(
+                                    it,
+                                    location.latitude,
+                                    location.longitude
+                                )
+                            }
+                    }
+                }
+            },
+            Looper.myLooper()
+        )
+    }
+
+    override fun onStart() {
+        super.onStart()
+        getCurrentLocationName()
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            LOCATION_PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    when {
+                        context?.let { PermissionUtils.isLocationEnabled(it) } == true -> {
+                            setUpLocationListener()
+                        }
+                        else -> {
+                            context?.let { PermissionUtils.showGPSNotEnabledDialog(it) }
+                        }
+                    }
+                } else {
+                    Toast.makeText(
+                        context,
+                        getString(R.string.location_permission_not_granted),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
+    }
+
     companion object {
         private const val TAG = "HomeFragment"
+        private const val LOCATION_PERMISSION_REQUEST_CODE = 999
     }
+
 
 }
